@@ -1,0 +1,14 @@
+package com.koreait.www.repository;
+
+import java.util.List;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.PagingVO;
+
+public interface BoardDAO {
+
+	List<BoardVO> getList(PagingVO pgvo);
+
+	int getTotalCount(PagingVO pgvo);
+
+}

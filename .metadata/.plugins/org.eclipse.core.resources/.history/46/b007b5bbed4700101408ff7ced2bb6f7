@@ -1,0 +1,38 @@
+package com.koreait.www.controller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.PagingVO;
+import com.koreait.www.handler.PagingHandler;
+import com.koreait.www.service.BoardService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping("/board/*")
+@RequiredArgsConstructor
+@Slf4j
+@Controller
+public class BoardController {
+
+	private final BoardService bsv;
+	
+	@GetMapping("/register")
+	public void register() {}
+	
+	@GetMapping("/list")
+	public void list(Model m, PagingVO pgvo) {
+		List<BoardVO> list = bsv.getList(pgvo);
+		
+		int totalCount = bsv.getTotalCount(pgvo);
+		PagingHandler ph = new PagingHandler(totalCount, pgvo);
+		)
+	}
+	
+}

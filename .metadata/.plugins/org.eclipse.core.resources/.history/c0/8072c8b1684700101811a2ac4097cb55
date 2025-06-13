@@ -1,0 +1,43 @@
+/**
+ * 
+ */
+
+const [id, pw, pwCheck, name, email,
+  idCheckBtn, registerBtn,
+  idResultArea, pwValidationArea, pwMatchArea,
+] = ['id', 'pw', 'pwCheck', 'name', 'email',
+  'idCheckBtn', 'registerBtn',
+  'idResultArea', 'pwValidationArea', 'pwMatchArea']
+  .map(e => document.getElementById(e));
+
+let idResult = undefined;
+let pwValid = undefined;
+let pwMatch = undefined;
+
+// 아이디 확인
+idCheckBtn.addEventListener('click', () => {
+  const input = id.value;
+  if (input == '' || idResult != undefined) return;
+
+  isRegistered(input).then(result => {
+    if (result == '0') {
+      idResult = true;
+      idResultArea.innerHTML = '<span class="text-success">사용가능한 아이디입니다.</span>';
+    } else {
+      idResult = false;
+      idResultArea.innerHTML = '<span class="text-danger">이미 사용중인 아이디입니다.</span>'
+    }
+  }).catch(console.log);
+});
+
+async function isRegistered(id) {
+  try {
+    const response = await fetch(`/user/check/${id}`);
+    const result = await response.text();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 비밀번호 확인

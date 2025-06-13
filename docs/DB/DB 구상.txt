@@ -1,0 +1,98 @@
+사용자
+create table user(
+id varchar(256),
+pw varchar(256) not null,
+name varchar(256) not null,
+email varchar(256),
+reg_date datetime default now(),
+last_login datetime default now(),
+primary key(id));
+
+권한 : ROLE_USER, ROLE_MANAGER, ROLE_ADMIN
+create table auth(
+ano bigint auto_increment,
+id varchar(256) not null,
+auth varchar(20) not null,
+primary key(ano)
+);
+
+공지사항
+create table notice(
+nno bigint auto_increment,
+title varchar(200) not null,
+id varchar(256) not null,
+content text,
+is_del varchar(5) default 'N'
+reg_date datetime default now(),
+read_count int default 0,
+primary key(nno)
+);
+
+게시글
+create table board(
+bno bigint auto_increment,
+title varchar(200) not null,
+id varchar(256) not null,
+name varchar(256) not null,
+content text,
+is_del varchar(5) default 'N',
+reg_date datetime default now(),
+read_count int default 0,
+cmt_count int default 0,
+file_count int default 0,
+primary key(bno)
+);
+
+댓글
+create table comment(
+cno bigint auto_increment,
+bno bigint not null,
+writer varchar(256) not null,
+name varchar(256),
+pwd varchar(256),
+content text,
+reg_date datetime default now(),
+is_del varchar(5) default 'N',
+primary key(cno)
+);
+
+좋아요
+create table likes(
+bno bigint not null,
+id varchar(256) not null
+);
+
+싫어요
+create table dislikes(
+bno bigint not null,
+id varchar(256) not null
+);
+
+북마크
+create table bookmark(
+id varchar(256) not null,
+bno bigint not null
+);
+
+공지사항
+create table notice(
+nno bigint auto_increment,
+content text,
+is_del varchar(5) default 'N',
+reg_date datetime default now(),
+exp_date datetime,
+read_count int default 0,
+primary key(nno)
+);
+
+-- fileDB
+create table file(
+uuid varchar(256),
+save_dir varchar(256) not null,
+file_name varchar(256) not null,
+file_type tinyint(1) default 0,
+bno bigint not null,
+file_size bigint,
+reg_date datetime default now(),
+primary key(uuid)
+);

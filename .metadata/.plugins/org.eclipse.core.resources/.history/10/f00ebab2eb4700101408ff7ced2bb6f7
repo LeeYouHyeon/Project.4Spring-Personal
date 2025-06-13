@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../layout/header.jsp" %>
+<div class="container-md mb-5 w-25">
+	<form action="/user/login" method="post" class="mt-5 p-5 bg-info-subtle rounded border">
+		<div class="row mb-3">
+			<div class="col">아이디</div>
+			<div class="col"><input type="text" name="id"></div>
+		</div>
+		<div class="row mb-3">
+			<div class="col">비밀번호</div>
+			<div class="col"><input type="password" name="pw"></div>
+		</div>
+		<div class="row mb-3">
+			<div class="col d-flex justify-content-center align-items-center">
+				<button type="submit">로그인</button>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col d-flex justify-content-center align-items-center">아직 회원이 아니신가요?</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col d-flex justify-content-center align-items-center">
+				<a href="/user/register">
+					<button type="button" class="btn">회원가입</button>
+				</a>
+			</div>
+		</div>
+	</form>
+</div>
+<%@ include file="../layout/footer.jsp" %>

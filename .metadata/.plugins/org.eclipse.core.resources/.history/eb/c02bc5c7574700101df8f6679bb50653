@@ -1,0 +1,40 @@
+package com.koreait.www.security;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.stereotype.Component;
+
+import com.koreait.www.repository.UserDAO;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+	@Autowired
+	private UserDAO udao;
+	
+	private RedirectStrategy redStr = new DefaultRedirectStrategy();
+	private RequestCache reqCache = new HttpSessionRequestCache();
+	
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
+		// 1. lastLogin 기록
+		String authId = authentication.getName();
+		int isOk = udao.updateLastLogin(authId);
+
+	}
+
+}

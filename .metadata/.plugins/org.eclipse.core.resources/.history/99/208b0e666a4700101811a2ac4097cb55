@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../layout/header.jsp" %>
+<div class="container-md my-5 text-center">
+	<form action="/user/register"
+		method="post"
+		class="fs-5 border py-5 container rounded bg-body-secondary">
+		<div class="row mb-4">
+			<div class="col-12 fs-3 fw-semibold">회원가입</div>
+		</div>
+		<div class="row my-3 align-items-center">
+			<div class="col-2"></div>
+			<div class="col-2">아이디</div>
+			<div class="col-3">
+				<input type="text"
+					name="id"
+					class="form-control"
+					id="id"
+					placeholder="아이디">
+			</div>
+			<div class="col-2">
+				<button type="button" id="idCheckBtn" class="btn btn-secondary">
+					아이디 중복 확인
+				</button>
+			</div>
+			<div class="col-3 text-start" id="idResultArea"></div>
+		</div>
+		
+		<div class="row mb-3 align-items-center">
+			<div class="col-2"></div>
+			<div class="col-2">비밀번호</div>
+			<div class="col-3">
+				<input type="password"
+					id="pw"
+					name="pw"
+					class="form-control"
+					placeholder="8자 이상, 알파벳 대소문자, 숫자 포함">
+			</div>
+			<div class="col-4 text-start" id="pwValidationArea">
+			</div>
+		</div>
+		
+		<div class="row mb-3 align-items-center">
+			<div class="col-4"></div>
+			<div class="col-3">
+				<input type="password"
+					name="pwCheck"
+					id="pwCheck"
+					class="form-control"
+					placeholder="비밀번호 확인">
+			</div>
+			<div class="col-4 text-start" id="pwMatchArea"></div>
+		</div>
+		
+		<div class="row mb-3 align-items-center">
+			<div class="col-2"></div>
+			<div class="col-2">닉네임</div>
+			<div class="col-3">
+				<input type="text"
+					name="name"
+					id="name"
+					class="form-control"
+					placeholder="최대 256자">
+			</div>
+			<div class="col-4"></div>
+		</div>
+		
+		<div class="row mb-3 align-items-center">
+			<div class="col-2"></div>
+			<div class="col-2">이메일</div>
+			<div class="col-3">
+				<input type="text"
+					name="email"
+					id="email"
+					class="form-control"
+					placeholder="이메일">
+			</div>
+			<div class="col-4 text-start" id="pwCheckArea">
+				(선택)
+			</div>
+		</div>
+		
+		<button type="button" class="btn btn-primary mt-4" id="registerBtn">회원가입</button>
+	</form>
+	
+	<script type="text/javascript" src="/resources/js/userRegister.js"></script>
+</div>
+<%@ include file="../layout/footer.jsp" %>

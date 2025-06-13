@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../layout/header.jsp" %>
+<sec:authentication property="principal" var="pri"/>
+<sec:authorize access="isAuthenticated()">
+	<c:set value="${pri.uvo.id}" var="id" />
+</sec:authorize>
+<sec:authorize access="isAnonymous()">
+	<c:set value="${null}" var="id" />
+</sec:authorize>
+<c:set value="${bvo.bno}" var="bno" />
+
+<div class="my-5">
+	<div class="container-md my-5 mx-auto border rounded">
+		<div class="row py-3 justify-content-center">
+			<div class="col-9 d-flex align-items-center">
+				<h3 class="m-0 ps-1">${bvo.title}</h3>
+			</div>
+			<div class="col-2">
+				<div class="row justify-content-end">작성자 : ${bvo.name}</div>
+				<div class="row justify-content-end">${bvo.regDate}</div>
+				<div class="row justify-content-end">조회수 : ${bvo.readCount}</div>
+			</div>
+		</div>
+		<div class="row p-3 border-top">
+			<div class="col ps-5 py-3 ms-2">${bvo.content}</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-5"></div>
+			<div class="col-1 d-flex align-items-center border rounded py-3" id="likeArea">
+				<div class="w-50 d-flex justify-content-center" id="likeIcon"></div>
+				<div class="w-50 text-center" id="likeCount"></div>
+			</div>
+			<div class="col-1 d-flex align-items-center border rounded py-3" id="dislikeArea">
+				<div class="w-50 d-flex justify-content-center" id="dislikeIcon"></div>
+				<div class="w-50 text-center" id="dislikeCount"></div>
+			</div>
+			<div class="col-5"></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		const id = `<c:out value="${id}" />`;
+		const bno = `<c:out value="${bno}" />`;
+	</script>
+	<script type="text/javascript" src="/resources/js/boardDetail.js"></script>
+</div>
+<%@ include file="../layout/footer.jsp" %>

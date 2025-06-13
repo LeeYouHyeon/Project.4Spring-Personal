@@ -1,0 +1,3 @@
+create database spring_project;
+grant all privileges on spring_project.* to 'springuser'@'localhost';
+flush privileges;

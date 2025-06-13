@@ -1,0 +1,33 @@
+package com.koreait.www.service;
+
+import java.util.List;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.BookmarkVO;
+import com.koreait.www.domain.DislikesVO;
+import com.koreait.www.domain.LikesVO;
+import com.koreait.www.domain.PagingVO;
+
+public interface BoardService {
+
+	List<BoardVO> getList(PagingVO pgvo);
+
+	long getTotalCount(PagingVO pgvo);
+
+	long insert(BoardVO bvo);
+
+	BoardVO getDetail(long bno);
+
+	long getLikeCount(long bno);
+
+	long getDislikeCount(long bno);
+
+	long toggleLike(LikesVO lvo);
+
+	long toggleDislike(DislikesVO dvo);
+
+	long getBookmark(BookmarkVO mvo);
+
+	int toggleBookmark(BookmarkVO mvo);
+
+}

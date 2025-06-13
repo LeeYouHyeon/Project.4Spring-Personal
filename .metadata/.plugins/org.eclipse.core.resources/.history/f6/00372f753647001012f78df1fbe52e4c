@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration "//UNKNOWN/" PUBLIC "unknown.dtd">
+<configuration>
+	<settings>
+		<setting value="true" name="mapUnderscoreToCamelCase" />
+	</settings>
+	<!-- <typeAliases><typeAlias type="com.koreait.www.domain.BoardVO" alias="BoardVO"/></typeAliases> -->
+</configuration>

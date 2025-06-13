@@ -1,0 +1,34 @@
+package com.koreait.www.repository;
+
+import java.util.List;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.BookmarkVO;
+import com.koreait.www.domain.DislikesVO;
+import com.koreait.www.domain.IBVO;
+import com.koreait.www.domain.LikesVO;
+import com.koreait.www.domain.PagingVO;
+
+public interface BoardDAO {
+//	게시판
+	List<BoardVO> getList(PagingVO pgvo);
+
+	long getTotalCount(PagingVO pgvo);
+
+	int insert(BoardVO bvo);
+
+	long getLastBno();
+
+	BoardVO getDetail(long bno);
+
+//	좋아요/싫어요
+	long getLikeCount(long bno);
+
+	long getDislikeCount(long bno);
+
+	int getLike(IBVO ibvo);
+
+	int getDislike(IBVO ibvo);
+
+
+}

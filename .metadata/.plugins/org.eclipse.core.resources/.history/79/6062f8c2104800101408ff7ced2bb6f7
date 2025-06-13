@@ -1,0 +1,22 @@
+package com.koreait.www.service;
+
+import java.util.List;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.PagingVO;
+
+public interface BoardService {
+
+	List<BoardVO> getList(PagingVO pgvo);
+
+	long getTotalCount(PagingVO pgvo);
+
+	long insert(BoardVO bvo);
+
+	BoardVO getDetail(long bno);
+
+	long getLikeCount(long bno);
+
+	long getDislikeCount(long bno);
+
+}

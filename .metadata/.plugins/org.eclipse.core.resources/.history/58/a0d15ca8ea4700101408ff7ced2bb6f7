@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../layout/header.jsp" %>
+<div class="container-md my-5">
+	<div class="my-5" id="result">
+		<h4 id="msg" class="mb-3"></h4>
+		<a id="link">
+			<button type="button" class="btn btn-secondary" id="btn"></button>
+		</a>
+	</div>
+	<script type="text/javascript">
+		const isOk = `<c:out value="${isOk}" />`;
+		const [result, btn, link, msg] = ["result", "btn", "link", "msg"].map(e => document.getElementById(e));
+		if (isOk === '0') {
+		  msg.innerText = '에러가 발생했습니다. 다시 시도해주세요.';
+		  result.classList.add('bg-danger-subtle');
+		  link.href = "/user/register";
+		  btn.innerText = "돌아가기";
+		} else if (isOk === undefined) {
+		  location.href = "/";
+		} else {
+		  msg.innerText = '회원 가입에 성공했습니다. 로그인해주세요.';
+		  result.classList.add('bg-success-subtle');
+		  link.href = "/user/login";
+		  btn.innerText = "로그인";
+		}
+		</script>
+</div>
+<%@ include file="../layout/footer.jsp" %>

@@ -1,0 +1,91 @@
+package com.koreait.www.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.BookmarkVO;
+import com.koreait.www.domain.DislikesVO;
+import com.koreait.www.domain.LikesVO;
+import com.koreait.www.domain.PagingVO;
+import com.koreait.www.repository.BoardDAO;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RequiredArgsConstructor
+@Slf4j
+@Service
+public class BoardServiceImpl implements BoardService {
+	
+	private final BoardDAO bdao;
+
+	@Override
+	public List<BoardVO> getList(PagingVO pgvo) {
+		// TODO Auto-generated method stub
+		return bdao.getList(pgvo);
+	}
+
+	@Override
+	public long getTotalCount(PagingVO pgvo) {
+		// TODO Auto-generated method stub
+		return bdao.getTotalCount(pgvo);
+	}
+
+	@Override
+	public long insert(BoardVO bvo) {
+		// TODO Auto-generated method stub
+		int isOk = bdao.insert(bvo);
+		if (isOk == 0) return 0;
+		return bdao.getLastBno();
+	}
+
+	@Override
+	public BoardVO getDetail(long bno) {
+		// TODO Auto-generated method stub
+		return bdao.getDetail(bno);
+	}
+
+	@Override
+	public long getLikeCount(long bno) {
+		// TODO Auto-generated method stub
+		return bdao.getLikeCount(bno);
+	}
+
+	@Override
+	public long getDislikeCount(long bno) {
+		// TODO Auto-generated method stub
+		return bdao.getDislikeCount(bno);
+	}
+
+	@Override
+	public int toggleLike(LikesVO lvo) {
+		// TODO Auto-generated method stub
+		if(bdao.getLike(lvo) == 0) {
+			bdao.insertLike(lvo);
+			return 1;
+		} else {
+			bdao.removeLike(lvo);
+			return -1;
+		}
+	}
+
+	@Override
+	public int toggleDislike(DislikesVO dvo) {
+		if (bdao.getDislike(dvo) == 0) {
+			bdao.insertDislike(dvo);
+			return 1;
+		} else {
+			bdao.removeDislike(dvo);
+			return -1;
+		}
+	}
+
+	@Override
+	public long getBookmark(BookmarkVO mvo) {
+		// TODO Auto-generated method stub
+		return bdao.getBookmark(mvo);
+	}
+	
+}

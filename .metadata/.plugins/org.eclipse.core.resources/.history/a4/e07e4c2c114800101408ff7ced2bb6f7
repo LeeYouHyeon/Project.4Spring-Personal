@@ -1,0 +1,80 @@
+package com.koreait.www.controller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.koreait.www.domain.BoardVO;
+import com.koreait.www.domain.PagingVO;
+import com.koreait.www.handler.PagingHandler;
+import com.koreait.www.service.BoardService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping("/board/*")
+@RequiredArgsConstructor
+@Slf4j
+@Controller
+public class BoardController {
+
+	private final BoardService bsv;
+	
+	@GetMapping("/list")
+	public void list(Model m, PagingVO pgvo) {
+		List<BoardVO> list = bsv.getList(pgvo);
+		
+		long totalCount = bsv.getTotalCount(pgvo);
+		PagingHandler ph = new PagingHandler(totalCount, pgvo);
+		
+		m.addAttribute("ph", ph);
+		m.addAttribute("list", list);
+	}
+	
+	@GetMapping("/register")
+	public void register() {}
+	
+	@ResponseBody
+	@PostMapping("/register")
+	public String register(@RequestBody BoardVO bvo) {
+		log.info(">>>> bvo >> {}", bvo);
+		long bno = bsv.insert(bvo);
+		log.info(">>>> bno >> " + bno);
+		return String.valueOf(bno);
+	}
+	
+	@GetMapping("/detail")
+	public void detail(long bno, Model m) {
+		m.addAttribute("bvo", bsv.getDetail(bno));
+	}
+	
+	@ResponseBody
+	@GetMapping("/board/getLikeCount")
+	public String getLikeCount(long bno) {
+		return String.valueOf(bsv.getLikeCount(bno));
+	}
+	
+	@ResponseBody
+	@GetMapping("/board/getDislikeCount")
+	public String getDislikeCount(long bno) {
+		return String.valueOf(bsv.getDislikeCount(bno));
+	}
+	
+	@ResponseBody
+	@GetMapping("/board/toggleLike")
+	public String toggleLike(String id) {
+		return String.valueOf(bsv.toggleLike(id));
+	}
+	
+	@ResponseBody
+	@GetMapping("/board/toggleDislike")
+	public String toggleDislike(String id) {
+		return String.valueOf(bsv.toggleDislike(id));
+	}
+}

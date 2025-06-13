@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../layout/header.jsp" %>
+<form action="/board/register" method="post" class="my-5">
+	<div class="container-md my-3">
+		<div class="row">
+			<div class="col-2">제목</div>
+			<div class="col-10">
+				<input type="text"
+					id="title"
+					name="title"
+					>
+			</div>
+		</div>
+	</div>
+</form>
+<%@ include file="../layout/footer.jsp" %>

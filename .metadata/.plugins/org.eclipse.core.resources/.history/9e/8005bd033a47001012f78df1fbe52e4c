@@ -1,0 +1,6 @@
+package com.koreait.www.domain;
+
+
+public class BoardVO {
+
+}

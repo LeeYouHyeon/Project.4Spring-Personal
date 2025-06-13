@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koreait.www.repository.BoardDAO">
+	<!-- board -->
+	<select id="getList" resultType="com.koreait.www.domain.BoardVO">
+		select * from board where is_del="N"
+		order by bno desc limit #{pageStart}, #{qty}
+	</select>
+	<select id="getTotalCount" resultType="long">
+		select count(bno) from board where is_del="N"
+	</select>
+	<insert id="insert">
+		insert into board(title, id, name, content) values(#{title}, #{id}, #{name}, #{content})
+	</insert>
+	<select id="getLastBno" resultType="long">
+		select max(bno) from board;
+	</select>
+	<select id="getDetail" resultType="com.koreait.www.domain.BoardVO">
+		select * from board where bno=#{bno}
+	</select>
+	<update id="increaseRead">
+		update board set read_count = read_count + 1 where bno=#{bno}
+	</update>
+	<select id="getId" resultType="String">
+		select id from board where bno=#{bno}
+	</select>
+	<update id="update">
+		update board set title=#{title}, name=#{name}, content=#{content} where bno=#{bno}
+	</update>
+	<select id="getBefore" resultType="com.koreait.www.domain.BoardVO">
+		select bno, title, name, reg_date from board where is_del="N" and bno <![CDATA[<]]> #{bno}
+		order by bno desc limit 1
+	</select>
+	
+	<!-- like/dislike -->
+	<select id="getLikeCount" resultType="long">
+		select count(id) from likes where bno=#{bno}
+	</select>
+	<select id="getDislikeCount" resultType="long">
+		select count(id) from dislikes where bno=#{bno}
+	</select>
+	<select id="getLike" resultType="int">
+		select count(*) from likes where bno=#{bno} and id=#{id}
+	</select>
+	<select id="getDislike" resultType="int">
+		select count(*) from dislikes where bno=#{bno} and id=#{id}
+	</select>
+	
+	<insert id="insertLike">
+		insert into likes values(#{bno}, #{id})
+	</insert>
+	<delete id="removeLike">
+		delete from likes where bno=#{bno} and id=#{id}
+	</delete>
+	<insert id="insertDislike">
+		insert into dislikes values(#{bno}, #{id})
+	</insert>
+	<delete id="removeDislike">
+		delete from dislikes where bno=#{bno} and id=#{id}
+	</delete>
+	
+	<!-- bookmark -->
+	<select id="getBookmark" resultType="int">
+		select count(*) from bookmark where id=#{id} and bno=#{bno} 
+	</select>
+	<insert id="insertBookmark">
+		insert into bookmark values(#{id}, #{bno})
+	</insert>
+	<delete id="removeBookmark">
+		delete from bookmark where bno=#{bno} and id=#{id}
+	</delete>
+</mapper>

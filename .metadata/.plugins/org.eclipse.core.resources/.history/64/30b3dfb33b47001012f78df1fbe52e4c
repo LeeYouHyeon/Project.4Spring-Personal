@@ -1,0 +1,89 @@
+package com.koreait.www.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import com.koreait.www.security.CustomAuthUserService;
+import com.koreait.www.security.LoginFailureHandler;
+import com.koreait.www.security.LoginSuccessHandler;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	// 비밀번호 암호화 객체
+	@Bean
+	public PasswordEncoder bcPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	// SuccessHandler
+	@Bean
+	public AuthenticationSuccessHandler authSuccessHandler() {
+		return new LoginSuccessHandler();
+	}
+	
+	// FailHandler
+	@Bean
+	public AuthenticationFailureHandler authFailureHandler() {
+		return new LoginFailureHandler();
+	}
+	
+	// UserDetail 객체
+	@Bean
+	public UserDetailsService customDetailsService() {
+		return new CustomAuthUserService();
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider authenticationProvicer(
+			UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(userDetailsService);
+		provider.setPasswordEncoder(passwordEncoder);
+		
+		provider.setHideUserNotFoundExceptions(false);
+		
+		return provider;
+	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// 인증용 객체 생성 매니저 설정
+		auth.userDetailsService(customDetailsService())
+			.passwordEncoder(bcPasswordEncoder());
+		
+		// 아이디를 틀렸는지 비밀번호를 틀렸는지 모르게 함
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// 권한에 따른 주소 매핑
+		// 로그인 로그아웃 구성정보 설정
+		
+		// csrf() : csrf 공격에 대한 설정
+		http.csrf().disable(); // WIP
+		
+		// 권한에 따른 승인 요청
+		
+		// 로그인 페이지 구성
+		
+		// 로그아웃 구성
+		http.logout()
+			.logoutUrl("/user/logout")
+			.invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID")
+			.logoutSuccessUrl("/");
+	}
+	
+}
