@@ -22,4 +22,5 @@ public class BoardVO {
 	private int readCount;
 	private int cmtCount;
 	private int fileCount;
+	private long likes;
 }

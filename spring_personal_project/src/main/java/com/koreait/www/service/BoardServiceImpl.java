@@ -22,7 +22,10 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardVO> getList(PagingVO pgvo) {
 		// TODO Auto-generated method stub
-		return bdao.getList(pgvo);
+		List<BoardVO> list = bdao.getList(pgvo);
+		for (BoardVO bvo : list)
+			bvo.setLikes(bdao.getLikeCount(bvo.getBno()));
+		return list;
 	}
 
 	@Override

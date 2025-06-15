@@ -6,18 +6,19 @@
 	<div class="container-md">
 		<!-- search line -->
 		<div class="row mb-3">
-			<form class="d-flex" action="/board/list">
-				<div class="col-1">
-					<select class="form-select me-2 w-25" name="type" aria-label="Default select example">
+			<div class="col-3"></div>
+			<form action="/board/list" class="col-6 d-flex">
+				<div class="w-25">
+					<select class="form-select" name="type" aria-label="Default select example">
 						<option ${ph.pgvo.type eq null ? 'selected' : ''}>검색</option>
-						<option value="t" ${ph.pgvo.type eq 't' ? 'selected' : ''}>제목</option>
+						<option value="t" ${ph.pgvo.type eq 't'  ? 'selected' : ''}>제목</option>
 						<option value="tc" ${ph.pgvo.type eq 'tc' ? 'selected' : ''}>제목+내용</option>
 						<option value="c" ${ph.pgvo.type eq 'c' ? 'selected' : ''}>내용</option>
 						<option value="w" ${ph.pgvo.type eq 'w' ? 'selected' : ''}>작성자</option>
 					</select>
 				</div>
-				<div class="col-4">
-					<input class="form-control me-2"
+				<div class="w-50">
+					<input class="form-control"
 						name="keyword"
 						type="search"
 						placeholder="Search"
@@ -28,58 +29,70 @@
 				</div>
 				<input type="hidden" name="pageNo" value="1">
 				<input type="hidden" name="qty" value="${ph.pgvo.qty}">
-				<div class="col-1">
+				<div class="w-25">
 					<button type="submit" class="btn btn-success">검색</button>				
 				</div>
 			</form>
-			<c:choose>
-				<c:when test="${ph.pgvo.type eq null}">
-					<div class="col-6"></div>
-				</c:when>
-				<c:otherwise>
-					<div class="col-5 text-right">
-						검색 결과 ${ph.totalCount} 건
-					</div>
-					<div class="col-1">
+			<div class="col-3">
+				<c:if test="${ph.pgvo.type ne null}">
+					<div class="w-50">검색 결과 ${ph.totalCount}</div>
+					<div class="w-50">
 						<a href="/notice/list">
 							<button type="button" class="btn btn-secondary">검색 취소</button>
 						</a>
 					</div>
-				</c:otherwise>
-			</c:choose>
+				</c:if>
+			</div>
 		</div>
-	</div>
-	
-	<div class="row fs-5 fw-semibold text-center">
-		<div class="col-1">번호</div>
-		<div class="col-5">제목</div>
-		<div class="col-2">작성자</div>
-		<div class="col-3">작성일</div>
-		<div class="col-1">조회수</div>
 	</div>
 	
 	<div class="container-md border rounded px-5 py-3 mb-3">
+		<div class="row fs-5 fw-semibold text-center">
+			<div class="col-1">번호</div>
+			<div class="col-4">제목</div>
+			<div class="col-2">작성자</div>
+			<div class="col-3">작성일</div>
+			<div class="col-1">조회수</div>
+			<div class="col-1">추천</div>
+		</div>
 		<hr>
+		<c:forEach items="${notices}" var="nvo">
+		<div class="row mb-2 bg-warning-subtle">
+			<div class="col-1 text-center">${nvo.nno}</div>
+			<div class="col-4">
+				<a href="/notice/detail?nno=${nvo.nno}">${nvo.title}</a>
+			</div>
+			<div class="col-2 text-center">관리자</div>
+			<div class="col-3 text-center">${nvo.regDate}</div>
+			<div class="col-1 text-center">${nvo.readCount}</div>
+			<div class="col-1 text-center">-</div>
+		</div>
+		</c:forEach>
 		<c:forEach items="${list}" var="bvo">
 		<div class="row mb-2">
-			<div class="col-1">${bvo.bno}</div>
-			<div class="col-5">
+			<div class="col-1 text-center">${bvo.bno}</div>
+			<div class="col-4">
 				<a href="/board/detail?bno=${bvo.bno}">${bvo.title}</a>
 				<span class="text-danger fw-bold">[${bvo.cmtCount}]</span>
 			</div>
-			<div class="col-2">${bvo.name}</div>
-			<div class="col-3">${bvo.regDate}</div>
-			<div class="col-1">${bvo.readCount}</div>
+			<div class="col-2 text-center">${bvo.name}</div>
+			<div class="col-3 text-center">${bvo.regDate}</div>
+			<div class="col-1 text-center">${bvo.readCount}</div>
+			<div class="col-1 text-center">${bvo.likes}</div>
 		</div>
 		</c:forEach>
 	</div>
-	<sec:authorize access="isAuthenticated()">
-	<div class="d-flex justify-content-end my-3 container-md">
-		<a href="/board/register">
-			<button type="button" class="btn btn-primary">글쓰기</button>		
-		</a>
+	<div class="my-3 container-md">
+		<div class="row">
+			<div class="col-1"></div>
+			
+		</div>
+		<sec:authorize access="isAuthenticated()">
+			<a href="/board/register">
+				<button type="button" class="btn btn-primary">글쓰기</button>		
+			</a>
+		</sec:authorize>
 	</div>	
-	</sec:authorize>
 
 	<!-- paging area -->
 	<nav aria-label="Page navigation example">

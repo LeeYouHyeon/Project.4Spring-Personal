@@ -59,23 +59,25 @@
 		<hr>
 		<c:forEach items="${list}" var="nvo">
 		<div class="row mb-2">
-			<div class="col-2">${nvo.nno}</div>
+			<div class="col-2 text-center">${nvo.nno}</div>
 			<div class="col-6">
 				<a href="/board/detail?bno=${nvo.nno}">${nvo.title}</a>
 			</div>
-			<div class="col-2">${nvo.regDate}</div>
-			<div class="col-2">${nvo.readCount}</div>
+			<div class="col-2 text-center">${nvo.regDate}</div>
+			<div class="col-2 text-center">${nvo.readCount}</div>
 		</div>
 		</c:forEach>
 	</div>
-	<sec:authentication property="principal" var="pri"/>
-	<c:if test="${pri.uvo.authList.stream().anyMatch(a -> a.auth.equals('ROLE_MANAGER')).get()}">
-		<div class="d-flex justify-content-end my-3 container-md">
-			<a href="/board/register">
-				<button type="button" class="btn btn-primary">글쓰기</button>		
-			</a>
-		</div>
-	</c:if>
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal" var="pri"/>
+		<c:if test="${pri.uvo.authList.stream().anyMatch(a -> a.auth.equals('ROLE_MANAGER')).get()}">
+			<div class="d-flex justify-content-end my-3 container-md">
+				<a href="/board/register">
+					<button type="button" class="btn btn-primary">글쓰기</button>		
+				</a>
+			</div>
+		</c:if>
+	</sec:authorize>
 
 	<!-- paging area -->
 	<nav aria-label="Page navigation example">

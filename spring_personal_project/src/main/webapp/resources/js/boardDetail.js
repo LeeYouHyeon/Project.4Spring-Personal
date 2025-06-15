@@ -29,7 +29,7 @@ fetch('/board/getNext?bno=' + bno)
   .then(text => domParser.parseFromString(text, "application/xml"))
   .then(xml => {
     console.log(xml);
-    const [nextTitle, nextWriter, nextRegDate] = ['beforeTitle', 'beforeWriter', 'beforeRegDate'].map(e => document.getElementById(e));
+    const [nextTitle, nextWriter, nextRegDate] = ['nextTitle', 'nextWriter', 'nextRegDate'].map(e => document.getElementById(e));
     const [nBno, nWriter, nTitle, nRegDate] = ["bno", "name", "title", "regDate"].map(e => xml.getElementsByTagName(e)[0].textContent);
 
     nextTitle.innerHTML = `<a href="/board/detail?bno=${nBno}">${nTitle}</a>`;

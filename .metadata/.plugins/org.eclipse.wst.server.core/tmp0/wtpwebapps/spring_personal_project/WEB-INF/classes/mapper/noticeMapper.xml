@@ -10,6 +10,7 @@
 	</select>
 	<select id="getTotalCount" resultType="long">
 		select count(nno) from notice where is_del = "N"
+		<include refid="search"></include>
 	</select>
 	<insert id="insert">
 		insert into nno(title, content, reg_date, exp_date)
@@ -19,7 +20,7 @@
 		select * from notice where nno=#{nno}
 	</select>
 	
-	<sql id="sesarch">
+	<sql id="search">
 		<if test="type != null">
 			<trim prefix="and (" suffix=")" suffixOverrides="or">
 				<foreach collection="typeToArray" item="type">

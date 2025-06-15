@@ -15,4 +15,6 @@ public interface NoticeService {
 
 	NoticeVO getDetail(long nno);
 
+	List<NoticeVO> getCurrentNotices();
+
 }

@@ -19,6 +19,12 @@ public class NoticeServiceImpl implements NoticeService {
 	private final NoticeDAO ndao;
 
 	@Override
+	public List<NoticeVO> getCurrentNotices() {
+		// TODO Auto-generated method stub
+		return ndao.getCurrentNotices();
+	}
+	
+	@Override
 	public List<NoticeVO> getList(PagingVO pgvo) {
 		// TODO Auto-generated method stub
 		return ndao.getList(pgvo);

@@ -11,6 +11,7 @@
 	</select>
 	<select id="getTotalCount" resultType="long">
 		select count(bno) from board where is_del="N"
+		<include refid="search"></include>
 	</select>
 	<insert id="insert">
 		insert into board(title, id, name, content) values(#{title}, #{id}, #{name}, #{content})
@@ -39,7 +40,7 @@
 		 order by bno limit 1
 	</select>
 	
-	<sql id="sesarch">
+	<sql id="search">
 		<if test="type != null">
 			<trim prefix="and (" suffix=")" suffixOverrides="or">
 				<foreach collection="typeToArray" item="type">

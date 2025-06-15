@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.koreait.www.domain.BoardVO;
 import com.koreait.www.domain.IBVO;
+import com.koreait.www.domain.NoticeVO;
 import com.koreait.www.domain.PagingVO;
 import com.koreait.www.handler.PagingHandler;
 import com.koreait.www.service.BoardService;
+import com.koreait.www.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +29,20 @@ public class BoardController {
 
 	private final BoardService bsv;
 	
+	private final NoticeService nsv;
+	
 	// 게시판
 	@GetMapping("/list")
 	public void list(Model m, PagingVO pgvo) {
 		List<BoardVO> list = bsv.getList(pgvo);
+		List<NoticeVO> notices = nsv.getCurrentNotices();
 		
 		long totalCount = bsv.getTotalCount(pgvo);
 		PagingHandler ph = new PagingHandler(totalCount, pgvo);
 		
 		m.addAttribute("ph", ph);
 		m.addAttribute("list", list);
+		m.addAttribute("notices", notices);
 	}
 	
 	@GetMapping("/register")

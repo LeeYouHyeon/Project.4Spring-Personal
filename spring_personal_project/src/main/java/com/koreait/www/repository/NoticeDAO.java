@@ -15,4 +15,6 @@ public interface NoticeDAO {
 
 	NoticeVO getDetail(long nno);
 
+	List<NoticeVO> getCurrentNotices();
+
 }
