@@ -2,22 +2,43 @@
  * 
  */
 // 이전글
-async function getBefore() {
-  try {
-    const response = await fetch('/board/getBefore?bno=' + bno);
-    const result = await response.json();
-    console.log(result);
-    const [beforeTitle, beforeWriter, beforeRegDate] = ['beforeTitle', 'beforeWriter', 'beforeRegDate'].map(e => document.getElementById(e));
-  
-    beforeTitle.innerHTML = `<a href="/board/detail?bno=${result.bno}>${result.title}</a>`;
-    beforeWriter.innerText = result.writer;
-    beforeRegDate.innerText = result.regDate; 
-  } catch (error) {
+const domParser = new DOMParser()
+fetch('/board/getBefore?bno=' + bno)
+  .then(resp => resp.text())
+  .then(text => domParser.parseFromString(text, "application/xml"))
+  .then(xml => {
+    try {
+      console.log(xml);
+      const [beforeTitle, beforeWriter, beforeRegDate] = ['beforeTitle', 'beforeWriter', 'beforeRegDate'].map(e => document.getElementById(e));
+      const [bBno, bWriter, bTitle, bRegDate] = ["bno", "name", "title", "regDate"].map(e => xml.getElementsByTagName(e)[0].textContent);
+
+      beforeTitle.innerHTML = `<a href="/board/detail?bno=${bBno}">${bTitle}</a>`;
+      beforeWriter.innerText = bWriter;
+      beforeRegDate.innerText = bRegDate;
+    } catch (error) {
+      document.getElementById('beforeArea').innerHTML = '<div class="col text-center">이전 글이 없습니다.</div>';
+    }
+  }).catch(error => {
     console.log(error);
-    document.getElementById('beforeArea').innerHTML = '<div class="col text-center py-2">이전 글이 없습니다.</div>'
-  }
-}
-getBefore();
+    document.getElementById('beforeArea').innerHTML = '<div class="col text-center">이전 글을 불러오는 중에 오류가 발생했습니다.</div>';
+  });
+
+// 다음글
+fetch('/board/getNext?bno=' + bno)
+  .then(resp => resp.text())
+  .then(text => domParser.parseFromString(text, "application/xml"))
+  .then(xml => {
+    console.log(xml);
+    const [nextTitle, nextWriter, nextRegDate] = ['beforeTitle', 'beforeWriter', 'beforeRegDate'].map(e => document.getElementById(e));
+    const [nBno, nWriter, nTitle, nRegDate] = ["bno", "name", "title", "regDate"].map(e => xml.getElementsByTagName(e)[0].textContent);
+
+    nextTitle.innerHTML = `<a href="/board/detail?bno=${nBno}">${nTitle}</a>`;
+    nextWriter.innerText = nWriter;
+    nextRegDate.innerText = nRegDate;
+  }).catch(error => {
+    console.log(error);
+    document.getElementById('nextArea').innerHTML = '<div class="col text-center">다음 글을 불러오는 중에 오류가 발생했습니다.</div>';
+  });
 
 //좋아요, 싫어요
 const [likeIcon, likeCount, dislikeIcon, dislikeCount, likeArea, dislikeArea] = ['likeIcon', 'likeCount', 'dislikeIcon', 'dislikeCount', 'likeArea', 'dislikeArea'].map(e => document.getElementById(e));
@@ -97,26 +118,26 @@ async function toggleLike() {
   if (id == '') return;
 
   fetch(`/board/toggleLike?id=${id}&bno=${bno}`)
-  .then(resp => resp.text())
-  .then(result => {
-    if (result === '0') return;
+    .then(resp => resp.text())
+    .then(result => {
+      if (result === '0') return;
 
-    liked = result === '1';
-    flushLike();
-  }).catch(console.log);
+      liked = result === '1';
+      flushLike();
+    }).catch(console.log);
 }
 
 async function toggleDislike() {
   if (id == '') return;
 
   fetch(`/board/toggleDislike?id=${id}&bno=${bno}`)
-  .then(resp => resp.text())
-  .then(result => {
-    if (result === '0') return;
+    .then(resp => resp.text())
+    .then(result => {
+      if (result === '0') return;
 
-    disliked = result === '1';
-    flushDislike();
-  }).catch(console.log);
+      disliked = result === '1';
+      flushDislike();
+    }).catch(console.log);
 }
 
 likeArea.onclick = toggleLike;
@@ -130,9 +151,9 @@ async function flushBookmark() {
   if (id == '') return;
 
   fetch(`/board/getBookmark?id=${id}&bno=${bno}`)
-  .then(resp => resp.text())
-  .then(result => {
-    bookmarkArea.innerHTML = result === '0' ? `
+    .then(resp => resp.text())
+    .then(result => {
+      bookmarkArea.innerHTML = result === '0' ? `
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
       <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
     </svg>
@@ -142,21 +163,21 @@ async function flushBookmark() {
       <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
     </svg>
     `;
-  });
+    });
 }
 
 async function toggleBookmark() {
   if (id == '') return;
 
   fetch(`/board/toggleBookmark?id=${id}&bno=${bno}`)
-  .then(resp => resp.text())
-  .then(result => {
-    bookmarked = result === '1';
-    flushBookmark();
-  })
+    .then(resp => resp.text())
+    .then(result => {
+      bookmarked = result === '1';
+      flushBookmark();
+    })
 }
 
-if(id != '') {
+if (id != '') {
   bookmarkArea.onclick = toggleBookmark;
   flushBookmark();
 }

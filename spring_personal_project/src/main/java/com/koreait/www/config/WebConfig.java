@@ -2,8 +2,8 @@ package com.koreait.www.config;
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletRegistration.Dynamic;
 
+import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -38,18 +38,19 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	@Override
 	protected void customizeRegistration(Dynamic registration) {
 		// 기타 사용자 설정
-		
+
 		// Exception 처리 설정
 		registration.setInitParameter("throwNoExceptionIfNoHandlerFound", "true");
-		
+
 		// 파일 업로드 경로
 		String uploadLocation = "D:\\web_0226_lyh\\_myProject\\_myProject\\_fileUpload";
-		int maxFileSize = 1024*1024*20;
-		int maxReqSize = maxFileSize*3;
+		int maxFileSize = 1024 * 1024 * 20;
+		int maxReqSize = maxFileSize * 3;
 		int fileSizeThreshold = maxFileSize;
-		
-		MultipartConfigElement ele = new MultipartConfigElement(uploadLocation, maxFileSize, maxReqSize, fileSizeThreshold);
-		
+
+		MultipartConfigElement ele = new MultipartConfigElement(uploadLocation, maxFileSize, maxReqSize,
+				fileSizeThreshold);
+
 		registration.setMultipartConfig(ele);
 	}
 

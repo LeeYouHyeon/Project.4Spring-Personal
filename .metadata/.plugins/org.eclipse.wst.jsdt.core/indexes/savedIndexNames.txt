@@ -1,11 +1,7 @@
-INDEX VERSION 1.4+D:\web_0226_lyh\worksapce\springProject\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-998027170.index
-2926132914.index
-984126851.index
-1866006478.index
-3697152146.index
-958442045.index
-144818464.index
+INDEX VERSION 1.4+D:\250226_FullStack\workspace\Project\Spring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+830442732.index
 4110207446.index
-3471537856.index
-3990178417.index
+808141970.index
+4194926557.index
+3466362371.index
+1442985612.index

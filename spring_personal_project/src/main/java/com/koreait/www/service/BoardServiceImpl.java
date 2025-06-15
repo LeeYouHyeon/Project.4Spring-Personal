@@ -3,7 +3,6 @@ package com.koreait.www.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.koreait.www.domain.BoardVO;
 import com.koreait.www.domain.IBVO;
@@ -63,6 +62,12 @@ public class BoardServiceImpl implements BoardService {
 	public BoardVO getBefore(long bno) {
 		// TODO Auto-generated method stub
 		return bdao.getBefore(bno);
+	}
+
+	@Override
+	public BoardVO getNext(long bno) {
+		// TODO Auto-generated method stub
+		return bdao.getNext(bno);
 	}
 
 	@Override

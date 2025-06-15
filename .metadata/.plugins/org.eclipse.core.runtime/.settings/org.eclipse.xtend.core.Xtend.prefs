@@ -1,4 +1,4 @@
-AbstractTextEditor.Color.Background=43,43,43
+AbstractTextEditor.Color.Background=25,29,31
 AbstractTextEditor.Color.Foreground=216,216,216
 eclipse.preferences.version=1
 org.eclipse.xtend.core.Xtend.syntaxColorer.tokenStyles.comment.color=98,151,85

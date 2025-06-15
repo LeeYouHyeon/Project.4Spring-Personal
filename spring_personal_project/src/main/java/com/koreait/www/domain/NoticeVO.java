@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class NoticeVO {
 	private long nno;
+	private String title;
 	private String content;
 	private String regDate;
 	private String expDate;

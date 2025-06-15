@@ -98,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/", "/user/login", "/user/register", "/user/check/**", "/user/registerResult",
 					"/notice/list", "/notice/detail",
 					"/board/list", "/board/detail", "/board/getLikeCount", "/board/getDislikeCount",
+					"/board/getBefore", "/board/getNext",
 					"/comment/**", "/upload/**",
 					"/resources/**", "custom404").permitAll()
 			.anyRequest().authenticated();

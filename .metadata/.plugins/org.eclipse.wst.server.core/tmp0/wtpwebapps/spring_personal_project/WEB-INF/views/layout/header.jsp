@@ -8,6 +8,15 @@
 <title>250226 이유현 Spring</title>
 <link rel="stylesheet" href="/resources/dist/css/bootstrap.min.css" type="text/css">
 <script type="text/javascript" src="/resources/dist/js/bootstrap.bundle.min.js"></script>
+<style type="text/css">
+	a{
+		color: black;
+		text-decoration: none;
+	}
+	a:hover{
+		text-decoration: underline;
+	}
+</style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">

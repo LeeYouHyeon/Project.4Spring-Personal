@@ -85,7 +85,7 @@
 			<div class="col-2 text-center" id="nextWriter"></div>
 			<div class="col-2 text-center" id="nextRegDate"></div>
 		</div>
-		<div class="row" id="beforeArea">
+		<div class="row py-2" id="beforeArea">
 			<div class="col-1 text-center">이전글</div>
 			<div class="col-7" id="beforeTitle"></div>
 			<div class="col-2 text-center" id="beforeWriter"></div>

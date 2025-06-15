@@ -16,18 +16,6 @@ auth varchar(20) not null,
 primary key(ano)
 );
 
-공지사항
-create table notice(
-nno bigint auto_increment,
-title varchar(200) not null,
-id varchar(256) not null,
-content text,
-is_del varchar(5) default 'N'
-reg_date datetime default now(),
-read_count int default 0,
-primary key(nno)
-);
-
 게시글
 create table board(
 bno bigint auto_increment,
@@ -77,6 +65,7 @@ bno bigint not null
 공지사항
 create table notice(
 nno bigint auto_increment,
+title varchar(256) not null,
 content text,
 is_del varchar(5) default 'N',
 reg_date datetime default now(),

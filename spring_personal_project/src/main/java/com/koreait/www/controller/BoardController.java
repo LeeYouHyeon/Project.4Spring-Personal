@@ -76,6 +76,12 @@ public class BoardController {
 		return bsv.getBefore(bno);
 	}
 	
+	@ResponseBody
+	@GetMapping("/getNext")
+	public BoardVO getNext(long bno) {
+		return bsv.getNext(bno);
+	}
+	
 //	좋아요/싫어요
 	@ResponseBody
 	@GetMapping("/board/getLike")

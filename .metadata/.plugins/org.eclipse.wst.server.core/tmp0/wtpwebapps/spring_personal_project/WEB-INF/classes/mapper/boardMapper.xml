@@ -6,6 +6,7 @@
 	<!-- board -->
 	<select id="getList" resultType="com.koreait.www.domain.BoardVO">
 		select * from board where is_del="N"
+		<include refid="search"></include>
 		order by bno desc limit #{pageStart}, #{qty}
 	</select>
 	<select id="getTotalCount" resultType="long">
@@ -33,6 +34,26 @@
 		select bno, title, name, reg_date from board where is_del="N" and bno <![CDATA[<]]> #{bno}
 		order by bno desc limit 1
 	</select>
+	<select id="getNext" resultType="com.koreait.www.domain.BoardVO">
+		select bno, title, name, reg_date from board where is_del="N" and bno <![CDATA[>]]> #{bno}
+		 order by bno limit 1
+	</select>
+	
+	<sql id="sesarch">
+		<if test="type != null">
+			<trim prefix="and (" suffix=")" suffixOverrides="or">
+				<foreach collection="typeToArray" item="type">
+					<trim suffix="or">
+						<choose>
+							<when test="type == 't'.toString()">title like concat('%', #{keyword}, '%')</when>
+							<when test="type == 'w'.toString()">writer like concat('%', #{keyword}, '%')</when>
+							<when test="type == 'c'.toString()">content like concat('%', #{keyword}, '%')</when>
+						</choose>
+					</trim>
+				</foreach>
+			</trim>
+		</if>
+	</sql>
 	
 	<!-- like/dislike -->
 	<select id="getLikeCount" resultType="long">

@@ -26,6 +26,8 @@ public interface BoardDAO {
 	
 	BoardVO getBefore(long bno);
 	
+	BoardVO getNext(long bno);
+	
 //	좋아요/싫어요
 	long getLikeCount(long bno);
 
@@ -49,6 +51,5 @@ public interface BoardDAO {
 	int insertBookmark(IBVO ibvo);
 
 	int removeBookmark(IBVO ibvo);
-
 
 }
