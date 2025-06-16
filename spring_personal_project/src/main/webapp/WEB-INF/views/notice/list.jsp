@@ -2,20 +2,20 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jsp" %>
 <div class="my-5">
-	<h3 class="text-center">공지사항</h3>
+	<h3 class="text-center mb-3">공지사항</h3>
 	<!-- search line -->
 	<div class="container-md">
 		<div class="row mb-3">
-			<form class="d-flex" action="/notice/list">
-				<div class="col-1">
-					<select class="form-select me-2 w-25" name="type" aria-label="Default select example">
+			<form class="d-flex p-0 col-6" action="/notice/list">
+				<div class="w-25 me-2">
+					<select class="form-select" name="type" aria-label="Default select example">
 						<option ${ph.pgvo.type eq null ? 'selected' : ''}>검색</option>
 						<option value="t" ${ph.pgvo.type eq 't' ? 'selected' : ''}>제목</option>
 						<option value="tc" ${ph.pgvo.type eq 'tc' ? 'selected' : ''}>제목+내용</option>
 						<option value="c" ${ph.pgvo.type eq 'c' ? 'selected' : ''}>내용</option>
 					</select>
 				</div>
-				<div class="col-4">
+				<div class="w-50 me-2">
 					<input class="form-control me-2"
 						name="keyword"
 						type="search"
@@ -27,25 +27,23 @@
 				</div>
 				<input type="hidden" name="pageNo" value="1">
 				<input type="hidden" name="qty" value="${ph.pgvo.qty}">
-				<div class="col-1">
+				<div class="w-25">
 					<button type="submit" class="btn btn-success">검색</button>				
 				</div>
 			</form>
+			<div class="col-6 d-flex justify-content-end align-items-center">
 			<c:choose>
 				<c:when test="${ph.pgvo.type eq null}">
-					<div class="col-6"></div>
+					총 공지사항 수 : ${ph.totalCount}
 				</c:when>
 				<c:otherwise>
-					<div class="col-5 text-right">
-						검색 결과 ${ph.totalCount} 건
-					</div>
-					<div class="col-1">
-						<a href="/notice/list">
-							<button type="button" class="btn btn-secondary">검색 취소</button>
-						</a>
-					</div>
+					검색 결과 ${ph.totalCount} 건
+					<a href="/notice/list" class="ms-3">
+						<button type="button" class="btn btn-secondary">검색 취소</button>
+					</a>
 				</c:otherwise>
 			</c:choose>
+			</div>
 		</div>
 	</div>
 	
@@ -61,23 +59,25 @@
 		<div class="row mb-2">
 			<div class="col-2 text-center">${nvo.nno}</div>
 			<div class="col-6">
-				<a href="/board/detail?bno=${nvo.nno}">${nvo.title}</a>
+				<a href="/notice/detail?nno=${nvo.nno}">${nvo.title}</a>
 			</div>
 			<div class="col-2 text-center">${nvo.regDate}</div>
 			<div class="col-2 text-center">${nvo.readCount}</div>
 		</div>
 		</c:forEach>
 	</div>
+	<div class="my-3 container-md d-flex justify-content-end">
 	<sec:authorize access="isAuthenticated()">
 		<sec:authentication property="principal" var="pri"/>
 		<c:if test="${pri.uvo.authList.stream().anyMatch(a -> a.auth.equals('ROLE_MANAGER')).get()}">
 			<div class="d-flex justify-content-end my-3 container-md">
-				<a href="/board/register">
+				<a href="/notice/register">
 					<button type="button" class="btn btn-primary">글쓰기</button>		
 				</a>
 			</div>
 		</c:if>
 	</sec:authorize>
+	</div>
 
 	<!-- paging area -->
 	<nav aria-label="Page navigation example">

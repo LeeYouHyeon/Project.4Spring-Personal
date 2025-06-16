@@ -1,7 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jsp" %>
-<div class="container-md mb-5 w-25">
+<div class="container-md mb-5 w-25 position-relative">
+	<c:if test="${isOk ne null}">
+		<span class="badge text-bg-success position-absolute top-0 start-50 translate-middle-x">
+			비밀번호가 변경되었습니다. 다시 로그인해주세요.
+		</span>
+	</c:if>
 	<form action="/user/login" method="post" class="mt-5 p-5 pb-4 bg-info-subtle rounded border">
 		<div class="row mb-3">
 			<div class="col-3 d-flex align-items-center">아이디</div>

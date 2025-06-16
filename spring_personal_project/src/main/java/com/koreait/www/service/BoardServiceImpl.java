@@ -3,6 +3,7 @@ package com.koreait.www.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.koreait.www.domain.BoardVO;
 import com.koreait.www.domain.IBVO;
@@ -22,10 +23,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardVO> getList(PagingVO pgvo) {
 		// TODO Auto-generated method stub
-		List<BoardVO> list = bdao.getList(pgvo);
-		for (BoardVO bvo : list)
-			bvo.setLikes(bdao.getLikeCount(bvo.getBno()));
-		return list;
+		return bdao.getList(pgvo);
 	}
 
 	@Override
@@ -97,25 +95,31 @@ public class BoardServiceImpl implements BoardService {
 		return bdao.getDislike(ibvo);
 	}
 
+	@Transactional
 	@Override
 	public int toggleLike(IBVO ibvo) {
 		// TODO Auto-generated method stub
 		if(bdao.getLike(ibvo) == 0) {
 			bdao.insertLike(ibvo);
+			bdao.updateLike(ibvo.getBno(), 1);
 			return 1;
 		} else {
 			bdao.removeLike(ibvo);
+			bdao.updateLike(ibvo.getBno(), -1);
 			return -1;
 		}
 	}
 
+	@Transactional
 	@Override
 	public int toggleDislike(IBVO ibvo) {
 		if (bdao.getDislike(ibvo) == 0) {
 			bdao.insertDislike(ibvo);
+			bdao.updateDislike(ibvo.getBno(), 1);
 			return 1;
 		} else {
 			bdao.removeDislike(ibvo);
+			bdao.updateDislike(ibvo.getBno(), -1);
 			return -1;
 		}
 	}
@@ -137,6 +141,18 @@ public class BoardServiceImpl implements BoardService {
 			bdao.removeBookmark(ibvo);
 			return -1;
 		}
+	}
+
+	@Override
+	public List<BoardVO> getHots() {
+		// TODO Auto-generated method stub
+		return bdao.getHots();
+	}
+
+	@Override
+	public List<BoardVO> getBookmarked(String id) {
+		// TODO Auto-generated method stub
+		return bdao.getBookmarks(id);
 	}
 	
 }

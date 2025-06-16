@@ -24,6 +24,8 @@ public interface BoardService {
 
 	BoardVO getNext(long bno);
 	
+	List<BoardVO> getHots();
+	
 //	좋아요, 싫어요
 	long getLikeCount(long bno);
 
@@ -42,5 +44,7 @@ public interface BoardService {
 	int getBookmark(IBVO ibvo);
 	
 	int toggleBookmark(IBVO ibvo);
+
+	List<BoardVO> getBookmarked(String id);
 
 }

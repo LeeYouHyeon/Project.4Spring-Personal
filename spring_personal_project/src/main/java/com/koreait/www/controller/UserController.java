@@ -1,9 +1,14 @@
 package com.koreait.www.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.koreait.www.domain.PasswordDTO;
 import com.koreait.www.domain.UserVO;
 import com.koreait.www.service.UserService;
 
@@ -28,7 +34,6 @@ public class UserController {
 	
 	@GetMapping("/login")
 	public void login() {
-		
 	}
 	
 	@PostMapping("/login")
@@ -60,4 +65,48 @@ public class UserController {
 	@GetMapping("/registerResult")
 	public void registerResult() {}
 	
+	@GetMapping("/list")
+	public void list(Model m) {
+		m.addAttribute("list", usv.getList());
+	}
+	
+	@ResponseBody
+	@GetMapping("/toggleManager")
+	public String toggleManager(String id) {
+		return String.valueOf(usv.toggleManager(id));
+	}
+	
+	@GetMapping("/user/myInfo")
+	public void myInfo() {}
+	
+	@ResponseBody
+	@PostMapping("/update")
+	public String update(UserVO uvo) {
+		log.info(">>>> update uvo >> {}", uvo);
+		return String.valueOf(usv.update(uvo));
+	}
+	
+	@GetMapping("/changePw")
+	public void changePw() {}
+	
+	@PostMapping("/changePw")
+	public String changePw(PasswordDTO pdto, RedirectAttributes re, HttpServletRequest request, HttpServletResponse response) {
+		pdto.setBefore(bcEncoder.encode(pdto.getBefore()));
+		pdto.setAfter(bcEncoder.encode(pdto.getAfter()));
+		int isOk = usv.changePw(pdto);
+		
+		re.addFlashAttribute("isOk", isOk);
+		String dest = "redirect:/changePw";
+		if (isOk > 0) {
+			logout(request, response);
+			dest = "redirect:/login";
+		}
+		
+		return dest;
+	}
+	
+	private void logout(HttpServletRequest request, HttpServletResponse response) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		new SecurityContextLogoutHandler().logout(request, response, authentication);
+	}
 }

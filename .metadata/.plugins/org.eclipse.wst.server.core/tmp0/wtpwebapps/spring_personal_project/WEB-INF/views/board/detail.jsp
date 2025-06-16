@@ -78,18 +78,83 @@
 		</c:if>
 		</sec:authorize>
 	</div>
+	
+	<!-- comment -->
+	<h4 class="text-center border rounded mb-3 w-25 p-3 mx-auto">댓글</h4>
+	<div class="container-md mb-3 p-3 border rounded" id="commentRegisterArea">
+		<div class="row my-3">
+			<div class="col-3">
+			<sec:authorize access="isAnonymous()">
+				<div class="d-flex mb-3">
+					<div class="w-25 d-flex align-items-center">이름</div>
+					<div class="w-75">
+						<input type="text"
+							class="form-control"
+							id="name">
+					</div>				
+				</div>
+				<div class="d-flex">
+					<div class="w-25 d-flex align-items-center">비밀번호</div>			
+					<div class="w-75">
+						<input type="password"
+							class="form-control"
+							id="pwd">
+					</div>				
+				</div>
+			</sec:authorize>
+			<sec:authorize access="isAuthenticated()">
+				<sec:authentication property="principal" var="pri"/>
+				<input type="hidden" id="id" value="${pri.uvo.id}">
+				<input type="hidden" id="name" value="${pri.uvo.name}">
+				<div class="w-25 d-flex align-items-center">이름</div>
+				<div class="w-75 d-flex align-items-center">${pri.uvo.name}</div>
+			</sec:authorize>
+			</div>
+			<div class="col-7">
+				<input type="text"
+					class="form-control h-100"
+					id="content">
+			</div>
+			<div class="col-2 d-flex flex-column justify-content-evenly">
+				<button class="btn btn-secondary" id="cmtCancelBtn">취소</button>
+				<button class="btn btn-primary" id="cmtRegisterBtn">등록</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-md mb-3 p-3 border rounded" id="commentListArea"></div>
+	
+	<!-- 이전글/다음글 -->
 	<div class="container-md mb-3 mx-auto border rounded">
 		<div class="row py-2 border-bottom" id="nextArea">
-			<div class="col-1 text-center">다음글</div>
-			<div class="col-7" id="nextTitle"></div>
-			<div class="col-2 text-center" id="nextWriter"></div>
-			<div class="col-2 text-center" id="nextRegDate"></div>
+			<c:choose>
+				<c:when test="${next eq null}">
+					<div class="col text-center">다음 글이 없습니다.</div>
+				</c:when>
+				<c:otherwise>
+					<div class="col-1 text-center">다음글</div>
+					<div class="col-7">
+						<a href="/board/detail?bno=${next.bno}">${next.title}</a>
+					</div>
+					<div class="col-2 text-center">${next.name}</div>
+					<div class="col-2 text-center">${next.regDate.substring(0, 10)}</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div class="row py-2" id="beforeArea">
-			<div class="col-1 text-center">이전글</div>
-			<div class="col-7" id="beforeTitle"></div>
-			<div class="col-2 text-center" id="beforeWriter"></div>
-			<div class="col-2 text-center" id="beforeRegDate"></div>
+			<c:choose>
+				<c:when test="${before eq null}">
+					<div class="col text-center">이전 글이 없습니다.</div>
+				</c:when>
+				<c:otherwise>
+					<div class="col-1 text-center">이전글</div>
+					<div class="col-7">
+						<a href="/board/detail?bno=${before.bno}">${before.title}</a>
+					</div>
+					<div class="col-2 text-center">${before.name}</div>
+					<div class="col-2 text-center">${before.regDate.substring(0, 10)}</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	<script type="text/javascript">

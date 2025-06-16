@@ -21,4 +21,22 @@
 	<select id="checkUser" resultType="int">
 		select count(id) from user where id=#{id}
 	</select>
+	
+	<select id="getList" resultType="com.koreait.www.domain.UserVO">
+		select * from user
+	</select>
+	
+	<insert id="grantManager">
+		insert into auth(id, auth) values (#{id}, "ROLE_MANAGER")
+	</insert>
+	<delete id="revokeManager">
+		delete from auth where id=#{id} and auth="ROLE_MANAGER"
+	</delete>
+	
+	<update id="update">
+		update user set name=#{name}, email=#{email} where id=#{id}
+	</update>
+	<update id="changePw">
+		update user set pw=#{after} where id=#{id}
+	</update>
 </mapper>

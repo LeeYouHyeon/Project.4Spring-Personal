@@ -2,6 +2,11 @@ package com.koreait.www.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +50,12 @@ public class BoardController {
 		m.addAttribute("notices", notices);
 	}
 	
+	@GetMapping("/bookmark")
+	public void bookmark(Model m) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		m.addAttribute("list", bsv.getBookmarked(authentication.getName()));
+	}
+	
 	@GetMapping("/register")
 	public void register() {}
 	
@@ -60,6 +71,8 @@ public class BoardController {
 	@GetMapping("/detail")
 	public void detail(long bno, Model m, String update) {
 		m.addAttribute("bvo", bsv.getDetail(bno, update == null));
+		m.addAttribute("next", bsv.getNext(bno));
+		m.addAttribute("before", bsv.getBefore(bno));
 	}
 	
 	@GetMapping("/modify")
@@ -76,16 +89,9 @@ public class BoardController {
 		return String.valueOf(bsv.update(bvo));
 	}
 	
-	@ResponseBody
-	@GetMapping("/getBefore")
-	public BoardVO getBefore(long bno) {
-		return bsv.getBefore(bno);
-	}
-	
-	@ResponseBody
-	@GetMapping("/getNext")
-	public BoardVO getNext(long bno) {
-		return bsv.getNext(bno);
+	@GetMapping(value = "/hots", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<BoardVO>> hots() {
+		return new ResponseEntity<List<BoardVO>>(bsv.getHots(), HttpStatus.OK);
 	}
 	
 //	좋아요/싫어요

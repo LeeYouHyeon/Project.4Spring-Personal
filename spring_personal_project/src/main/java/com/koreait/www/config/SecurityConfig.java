@@ -93,11 +93,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// authenticated() : 인증된 사용자만 가능한 경로
 		// ADMIN > MANAGER > USER
 		http.authorizeRequests()
-			.antMatchers("/user/list").hasRole("ADMIN")
+			.antMatchers("/user/list", "/user/toggleManager").hasRole("ADMIN")
 			.antMatchers("/notice/register").hasRole("MANAGER")
 			.antMatchers("/", "/user/login", "/user/register", "/user/check/**", "/user/registerResult",
 					"/notice/list", "/notice/detail",
-					"/board/list", "/board/detail", "/board/getLikeCount", "/board/getDislikeCount",
+					"/board/list", "/board/detail",
+					"/board/getLikeCount", "/board/getDislikeCount",
+					"/board/hots",
 					"/board/getBefore", "/board/getNext",
 					"/comment/**", "/upload/**",
 					"/resources/**", "custom404").permitAll()

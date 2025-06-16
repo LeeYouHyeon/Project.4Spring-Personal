@@ -48,7 +48,20 @@ public class NoticeController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(long nno, Model m) {
-		m.addAttribute("nvo", nsv.getDetail(nno));
+	public void detail(long nno, Model m, String update) {
+		m.addAttribute("nvo", nsv.getDetail(nno, update == null));
+		m.addAttribute("before", nsv.getBefore(nno));
+		m.addAttribute("next", nsv.getNext(nno));
+	}
+	
+	@GetMapping("/modify")
+	public void modify(long nno, Model m) {
+		m.addAttribute("nvo", nsv.getDetail(nno, false));
+	}
+	
+	@ResponseBody
+	@PostMapping("/update")
+	public String update(@RequestBody NoticeVO nvo) {
+		return String.valueOf(nsv.update(nvo));
 	}
 }

@@ -53,8 +53,11 @@
 					<li class="nav-item d-flex align-items-center">
 						${pri.uvo.name}(${pri.uvo.id})
 					</li>
+					<li class="nav-item d-flex align-items-center">
+						<a class="nav-link" href="/board/bookmark">즐겨찾기</a>
+					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/user/detail">개인정보</a>
+						<a class="nav-link" href="/user/myInfo">개인정보</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/user/logout">로그아웃</a>

@@ -15,7 +15,7 @@ button.addEventListener('click', () => {
 
   register().then(result => {
     if (result === '0') alert('수정에 실패했습니다. 다시 시도해주세요.');
-    else location.href = `/board/detail?update=true&bno=${bno}`;
+    else location.href = `/board/detail?update=true&bno=${bno}&update=true`;
   })
 });
 

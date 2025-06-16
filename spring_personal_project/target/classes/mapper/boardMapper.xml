@@ -32,12 +32,19 @@
 		update board set title=#{title}, name=#{name}, content=#{content} where bno=#{bno}
 	</update>
 	<select id="getBefore" resultType="com.koreait.www.domain.BoardVO">
-		select bno, title, name, reg_date from board where is_del="N" and bno <![CDATA[<]]> #{bno}
+		select bno, title, name, reg_date from board
+		where is_del="N" and bno <![CDATA[<]]> #{bno}
 		order by bno desc limit 1
 	</select>
 	<select id="getNext" resultType="com.koreait.www.domain.BoardVO">
-		select bno, title, name, reg_date from board where is_del="N" and bno <![CDATA[>]]> #{bno}
+		select bno, title, name, reg_date from board
+		where is_del="N" and bno <![CDATA[>]]> #{bno}
 		 order by bno limit 1
+	</select>
+	<select id="getHots" resultType="com.koreait.www.domain.BoardVO">
+		select * from board where is_del="N"
+		and datediff(now(), reg_date) <![CDATA[<=]]> 30
+		order by likes-dislikes desc limit 5
 	</select>
 	
 	<sql id="search">
@@ -49,6 +56,7 @@
 							<when test="type == 't'.toString()">title like concat('%', #{keyword}, '%')</when>
 							<when test="type == 'w'.toString()">writer like concat('%', #{keyword}, '%')</when>
 							<when test="type == 'c'.toString()">content like concat('%', #{keyword}, '%')</when>
+							<when test="type == 'i'.toString()">id = #{keyword}</when>
 						</choose>
 					</trim>
 				</foreach>
@@ -71,7 +79,7 @@
 	</select>
 	
 	<insert id="insertLike">
-		insert into likes values(#{bno}, #{id})
+		insert into likes values(#{bno}, #{id})b
 	</insert>
 	<delete id="removeLike">
 		delete from likes where bno=#{bno} and id=#{id}
@@ -82,6 +90,12 @@
 	<delete id="removeDislike">
 		delete from dislikes where bno=#{bno} and id=#{id}
 	</delete>
+	<update id="updateLike">
+		update board set likes = likes + #{i} where bno=#{bno}
+	</update>
+	<update id="updateDislike">
+		update board set dislikes = dislikes + #{i} where bno=#{bno}
+	</update>
 	
 	<!-- bookmark -->
 	<select id="getBookmark" resultType="int">
@@ -93,4 +107,9 @@
 	<delete id="removeBookmark">
 		delete from bookmark where bno=#{bno} and id=#{id}
 	</delete>
+	<select id="getBookmarks" resultType="com.koreait.www.domain.BoardVO">
+		select * from board where bno in (
+			select bno from bookmark where id=#{id}
+		) order by bno desc;
+	</select>
 </mapper>

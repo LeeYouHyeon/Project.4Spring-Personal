@@ -13,8 +13,14 @@ public interface NoticeService {
 
 	long insert(NoticeVO nvo);
 
-	NoticeVO getDetail(long nno);
+	NoticeVO getDetail(long nno, boolean increaseRC);
 
 	List<NoticeVO> getCurrentNotices();
+
+	NoticeVO getBefore(long nno);
+
+	NoticeVO getNext(long nno);
+
+	int update(NoticeVO nvo);
 
 }

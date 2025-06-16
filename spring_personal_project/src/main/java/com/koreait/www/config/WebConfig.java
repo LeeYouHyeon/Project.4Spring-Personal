@@ -2,8 +2,8 @@ package com.koreait.www.config;
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
-
 import javax.servlet.ServletRegistration.Dynamic;
+
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

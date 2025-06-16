@@ -11,10 +11,20 @@ public interface NoticeDAO {
 
 	long getTotalCount(PagingVO pgvo);
 
-	long insert(NoticeVO nvo);
+	int insert(NoticeVO nvo);
 
+	long getLast();
+	
 	NoticeVO getDetail(long nno);
 
 	List<NoticeVO> getCurrentNotices();
+
+	void increaseRC(long nno);
+
+	NoticeVO getBefore(long nno);
+
+	NoticeVO getNext(long nno);
+
+	int update(NoticeVO nvo);
 
 }

@@ -13,17 +13,36 @@
 		<include refid="search"></include>
 	</select>
 	<insert id="insert">
-		insert into nno(title, content, reg_date, exp_date)
-		values(#{title}, #{content}, #{regDate}, #{expDate})
+		insert into notice(title, content, exp_date)
+		values(#{title}, #{content}, #{expDate})
 	</insert>
+	<select id="getLast" resultType="long">
+		select max(nno) from notice
+	</select>
 	<select id="getDetail" resultType="com.koreait.www.domain.NoticeVO">
-		select * from notice where nno=#{nno}
+		select * from notice where nno=#{nno} and is_del = "N"
+	</select>
+	<select id="getBefore" resultType="com.koreait.www.domain.NoticeVO">
+		select nno, title, reg_date from notice where (nno <![CDATA[<]]> #{nno}) and is_del = "N"
+		order by nno desc limit 1
+	</select>
+	<select id="getNext" resultType="com.koreait.www.domain.NoticeVO">
+		select nno, title, reg_date from notice where (nno <![CDATA[>]]> #{nno}) and is_del = "N"
+		order by nno limit 1
 	</select>
 	
 	<select id="getCurrentNotices" resultType="com.koreait.www.domain.NoticeVO">
 		select * from notice where (exp_date is null) or (exp_date <![CDATA[>=]]> now())
 		order by nno desc;
 	</select>
+	<update id="increaseRC">
+		update notice set read_count = read_count + 1 where nno = #{nno}
+	</update>
+	<update id="update">
+		update notice set title=#{title}, content=#{content}
+		<if test="expDate != null">, exp_date = #{expDate}</if>
+		where nno=#{nno}
+	</update>
 	
 	<sql id="search">
 		<if test="type != null">

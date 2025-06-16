@@ -1,45 +1,6 @@
 /**
  * 
  */
-// 이전글
-const domParser = new DOMParser()
-fetch('/board/getBefore?bno=' + bno)
-  .then(resp => resp.text())
-  .then(text => domParser.parseFromString(text, "application/xml"))
-  .then(xml => {
-    try {
-      console.log(xml);
-      const [beforeTitle, beforeWriter, beforeRegDate] = ['beforeTitle', 'beforeWriter', 'beforeRegDate'].map(e => document.getElementById(e));
-      const [bBno, bWriter, bTitle, bRegDate] = ["bno", "name", "title", "regDate"].map(e => xml.getElementsByTagName(e)[0].textContent);
-
-      beforeTitle.innerHTML = `<a href="/board/detail?bno=${bBno}">${bTitle}</a>`;
-      beforeWriter.innerText = bWriter;
-      beforeRegDate.innerText = bRegDate;
-    } catch (error) {
-      document.getElementById('beforeArea').innerHTML = '<div class="col text-center">이전 글이 없습니다.</div>';
-    }
-  }).catch(error => {
-    console.log(error);
-    document.getElementById('beforeArea').innerHTML = '<div class="col text-center">이전 글을 불러오는 중에 오류가 발생했습니다.</div>';
-  });
-
-// 다음글
-fetch('/board/getNext?bno=' + bno)
-  .then(resp => resp.text())
-  .then(text => domParser.parseFromString(text, "application/xml"))
-  .then(xml => {
-    console.log(xml);
-    const [nextTitle, nextWriter, nextRegDate] = ['nextTitle', 'nextWriter', 'nextRegDate'].map(e => document.getElementById(e));
-    const [nBno, nWriter, nTitle, nRegDate] = ["bno", "name", "title", "regDate"].map(e => xml.getElementsByTagName(e)[0].textContent);
-
-    nextTitle.innerHTML = `<a href="/board/detail?bno=${nBno}">${nTitle}</a>`;
-    nextWriter.innerText = nWriter;
-    nextRegDate.innerText = nRegDate;
-  }).catch(error => {
-    console.log(error);
-    document.getElementById('nextArea').innerHTML = '<div class="col text-center">다음 글을 불러오는 중에 오류가 발생했습니다.</div>';
-  });
-
 //좋아요, 싫어요
 const [likeIcon, likeCount, dislikeIcon, dislikeCount, likeArea, dislikeArea] = ['likeIcon', 'likeCount', 'dislikeIcon', 'dislikeCount', 'likeArea', 'dislikeArea'].map(e => document.getElementById(e));
 if (id != '') {
@@ -181,3 +142,57 @@ if (id != '') {
   bookmarkArea.onclick = toggleBookmark;
   flushBookmark();
 }
+
+// 댓글
+const [writer, pwd, nick, content, cmtCancelBtn, cmtRegisterBtn] = ['writer', 'pwd', 'nick', 'content', 'cmtCancelBtn', 'cmtRegisterBtn'].map(e => document.getElementById(e));
+
+cmtCancelBtn.addEventListener('click', () => {
+  content.value = '';
+  try {
+    pwd.value = '';
+    writer.value = '';
+  } catch (error) {
+    ;
+  }
+});
+
+cmtRegisterBtn.addEventListener('click', () => {
+  if(nick.value == '') {
+    nick.focus();
+    return;
+  }
+  if(pwd != null && pwd.value == '') {
+    pwd.focus();
+    return;
+  }
+  if (content.value == '') {
+    content.focus();
+    return;
+  }
+
+  let json = {
+    'bno': bno,
+    'writer': writer.value,
+    'content': content.value
+  };
+  if(pwd != null) json['pwd'] = pwd.value;
+  else json['name'] = nick.value;
+
+  fetch('/comment/register', {
+    method: 'post',
+    header: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(json)
+  })
+  .then(resp => resp.text())
+  .then(result => {
+    if (result == '0') {
+      alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
+      return;
+    }
+
+    cmtCancelBtn.click();
+  })
+  .catch(console.log)
+});
