@@ -8,6 +8,7 @@ public interface CommentDAO {
 
 	List<CommentVO> getList(long bno);
 
-	char[] register(CommentVO cvo);
-
+	int registerAnonymous(CommentVO cvo);
+	
+	int registerAuthenticated(CommentVO cvo);
 }

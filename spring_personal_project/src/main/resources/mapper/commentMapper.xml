@@ -6,14 +6,12 @@
 	<select id="getList" resultType="com.koreait.www.domain.CommentVO">
 		select * from comment where bno=#{bno} order by cno
 	</select>
-	<insert id="register">
-		<if test="pwd != null">
-			insert into comment(bno, writer, pwd, content)
-			values(#{bno}, #{writer}, #{pwd}, #{content})
-		</if>
-		<if test="pwd == null">
-			insert into comment(bno, writer, name, content)
-			values(#{bno}, #{writer}, #{name}, #{content})
-		</if>
+	<insert id="registerAnonymous">
+		insert into comment(bno, name, pwd, content)
+		values(#{bno}, #{name}, #{pwd}, #{content})
+	</insert>
+	<insert id="registerAuthenticated">
+		insert into comment(bno, name, id, content)
+		values(#{bno}, #{name}, #{id}, #{content})
 	</insert>
 </mapper>

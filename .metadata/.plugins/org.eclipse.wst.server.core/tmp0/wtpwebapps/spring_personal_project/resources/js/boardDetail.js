@@ -143,28 +143,31 @@ if (id != '') {
   flushBookmark();
 }
 
-// 댓글
-const [nick, pwd, id, content, cmtCancelBtn, cmtRegisterBtn] = ['name', 'pwd', 'id', 'content', 'cmtCancelBtn', 'cmtRegisterBtn'].map(e => document.getElementById(e));
+// 댓글 등록
+const [cname, pwd, cid, content, cmtCancelBtn, cmtRegisterBtn] = ['cname', 'pwd', 'cid', 'content', 'cmtCancelBtn', 'cmtRegisterBtn'].map(e => document.getElementById(e));
 
 cmtCancelBtn.addEventListener('click', () => {
   content.value = '';
   try {
     pwd.value = '';
-    nick.value = '';
+    cid.value = '';
   } catch (error) {
     ;
   }
 });
 
 cmtRegisterBtn.addEventListener('click', () => {
-  if(nick.value == '') {
-    nick.focus();
-    return;
+  if (pwd != null) {
+    if (cname.value == '') {
+      cname.focus();
+      return;
+    }
+    if (pwd.value == '') {
+      pwd.focus();
+      return;
+    }
   }
-  if(pwd != null && pwd.value == '') {
-    pwd.focus();
-    return;
-  }
+
   if (content.value == '') {
     content.focus();
     return;
@@ -172,27 +175,115 @@ cmtRegisterBtn.addEventListener('click', () => {
 
   let json = {
     'bno': bno,
-    'name': nick.value,
+    'name': cname.value,
     'content': content.value
   };
-  if(pwd != null) json['pwd'] = pwd.value;
-  else json['id'] = id.value;
+  if (pwd != null) json['pwd'] = pwd.value;
+  else json['id'] = cid.value;
 
   fetch('/comment/register', {
     method: 'post',
-    header: {
+    headers: {
       'Content-Type': 'application/json; charset=utf-8'
     },
     body: JSON.stringify(json)
   })
-  .then(resp => resp.text())
-  .then(result => {
-    if (result == '0') {
-      alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
-      return;
-    }
+    .then(resp => resp.text())
+    .then(result => {
+      if (result == '0') {
+        alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
 
-    cmtCancelBtn.click();
-  })
-  .catch(console.log)
+      cmtCancelBtn.click();
+      flushComment();
+    })
+    .catch(console.log)
 });
+
+// 댓글 불러오기
+const cmtListArea = document.getElementById("commentListArea");
+function flushComment() {
+  fetch('/comment/list?bno=' + bno)
+    .then(resp => resp.json())
+    .then(json => {
+      let init = '<div class="row mb-3">';
+      init += '<div class="col-2 d-flex justify-content-center align-items-center">작성자</div>';
+      init += '<div class="col-6 d-flex justify-content-center align-items-center">내용</div>';
+      init += '<div  class="col-2 d-flex justify-content-center align-items-center">작성일</div>';
+      init += '</div><hr>';
+      cmtListArea.innerHTML = init;
+      for (const cvo of json) {
+        const modifiable = cvo.id == null || cvo.id == id;
+        const removable = modifiable || isManager;
+        let cmt = '<div class="row mb-3">';
+        cmt += `<div class="col-2 d-flex justify-content-center align-items-center">${cvo.name}</div>`;
+        cmt += `<div class="col-6 d-flex align-items-center">${cvo.content}</div>`;
+        cmt += `<div class="col-6 d-none align-items-center"><input type="text" data-cno=${cvo.cno} value=${cvo.content} /></div>`;
+        cmt += `<div class="col-2 d-flex justify-content-center align-items-center">${cvo.regDate}</div>`;
+        cmt += '<div class="col-2 d-flex justify-content-end">';
+        if (modifiable) {
+          cmt += `<button type="button" data-cno=${cvo.cno}
+          class="btn btn-warning me-3 modifyBtn ${cvo.id == null ? 'anonymous' : ''}">수정</button>`;
+          cmt += `<button type="button" data-cno=${cvo.cno}
+          class="btn btn-warning me-3 updateBtn d-none ${cvo.id == null ? 'anonymous' : ''}">확인</button>`;
+        }
+        if (removable) cmt += `<button type="button" data-cno=${cvo.cno}
+          class="btn btn-danger removeBtn ${cvo.id == null ? 'anonymous' : ''}">삭제</button>`;
+        cmt += '</div></div>';
+        cmtListArea.innerHTML += cmt;
+      }
+    }).catch(console.log);
+}
+
+flushComment();
+
+document.addEventListener('click', e => {
+  const classList = e.target.classList;
+  const cno = e.target.dataset.cno;
+
+  if (classList.contains('modifyBtn')) {
+    if (classList.contains('anonymous')) {
+
+    }
+  } else if (classList.contains('removeBtn') && confirm('댓글을 삭제하시겠습니까?')) {
+    if (classList.contains(anonymous)) {
+      fetch('/comment/remove', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: {
+          cno: cno,
+          pwd: prompt('비밀번호를 입력하세요.')
+        }
+      }).then(resp => resp.text())
+        .then(result => {
+          if (result == '-1') alert('비밀번호가 틀렸습니다.');
+          else if (result == '0') alert('오류가 발생했습니다. 다시 시도해주세요.');
+          else flushComment();
+        }).catch(error => {
+          console.log(error);
+          alert('오류가 발생했습니다.');
+        });
+    } else {
+      fetch('/comment/remove?cno=' + cno)
+        .then(resp => resp.text())
+        .then(result => {
+          if (result == '0') alert('댓글을 삭제하지 못했습니다.');
+          else flushComment();
+        })
+    }
+  } else if (classList.contains('updateBtn')) {
+
+  }
+});
+
+function hide(e) {
+  e.classList.remove("d-flex");
+  e.classList.add('d-none');
+}
+function show(e) {
+  e.classList.remove('d-none');
+  e.classList.add('d-flex');
+}

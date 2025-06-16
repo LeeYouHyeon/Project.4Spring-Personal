@@ -18,16 +18,18 @@ updateBtn.addEventListener('click', () => {
     return;
   }
 
+  const json = {
+    'id': id,
+    'name': nickInput.value,
+    'email': emailInput.value
+  };
+
   fetch('/user/update', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
     },
-    body: JSON.stringify({
-      'id': id,
-      'name': nickInput.value,
-      'email': emailInput.value
-    })
+    body: JSON.stringify(json)
   }).then(resp => resp.text())
     .then(result => {
       if (result === '0') {
@@ -36,7 +38,7 @@ updateBtn.addEventListener('click', () => {
       }
       nickPrint.innerText = nickInput.value;
       emailPrint.innerText = emailInput.value == '' ? '-' : emailInput.value;
-      
+
       cancelBtn.click();
     })
     .catch(error => {

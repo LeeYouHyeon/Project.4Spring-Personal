@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -81,16 +82,16 @@ public class UserController {
 	
 	@ResponseBody
 	@PostMapping("/update")
-	public String update(UserVO uvo) {
+	public String update(@RequestBody UserVO uvo) {
 		log.info(">>>> update uvo >> {}", uvo);
 		return String.valueOf(usv.update(uvo));
 	}
-	
+		
 	@GetMapping("/changePw")
 	public void changePw() {}
 	
 	@PostMapping("/changePw")
-	public String changePw(PasswordDTO pdto, RedirectAttributes re, HttpServletRequest request, HttpServletResponse response) {
+	public String changePw(@RequestBody PasswordDTO pdto, RedirectAttributes re, HttpServletRequest request, HttpServletResponse response) {
 		pdto.setBefore(bcEncoder.encode(pdto.getBefore()));
 		pdto.setAfter(bcEncoder.encode(pdto.getAfter()));
 		int isOk = usv.changePw(pdto);

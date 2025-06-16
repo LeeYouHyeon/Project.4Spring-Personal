@@ -8,6 +8,6 @@ public interface CommentService {
 
 	List<CommentVO> getList(long bno);
 
-	char[] register(CommentVO cvo);
+	int register(CommentVO cvo);
 
 }

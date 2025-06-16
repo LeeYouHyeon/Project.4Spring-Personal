@@ -14,8 +14,8 @@ import lombok.ToString;
 public class CommentVO {
 	private long cno;
 	private long bno;
-	private String writer;
 	private String name;
+	private String id;
 	private String pwd;
 	private String content;
 	private String regDate;

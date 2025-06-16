@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jsp" %>
 <sec:authentication property="principal" var="pri"/>
@@ -90,7 +90,7 @@
 					<div class="w-75">
 						<input type="text"
 							class="form-control"
-							id="writer">
+							id="cname">
 					</div>				
 				</div>
 				<div class="d-flex">
@@ -104,8 +104,8 @@
 			</sec:authorize>
 			<sec:authorize access="isAuthenticated()">
 				<sec:authentication property="principal" var="pri"/>
-				<input type="hidden" id="writer" value="${pri.uvo.id}">
-				<input type="hidden" id="nick" value="${pri.uvo.name}">
+				<input type="hidden" id="cname" value="${pri.uvo.name}">
+				<input type="hidden" id="cid" value="${pri.uvo.id}">
 				<div class="w-25 d-flex align-items-center">이름</div>
 				<div class="w-75 d-flex align-items-center">${pri.uvo.name}</div>
 			</sec:authorize>
@@ -156,10 +156,15 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
+		<c:set value="${false}" var="isManager"></c:set>
+		<sec:authorize access="isAuthenticated()">
+			<c:set var="isManager" value="${pri.uvo.authList.stream().anyMatch(a -> a.auth.equals('ROLE_MANAGER')).get()}"></c:set>
+		</sec:authorize>
 	</div>
 	<script type="text/javascript">
 		const id = `<c:out value="${id}" />`;
 		const bno = `<c:out value="${bno}" />`;
+		const isManager = `<c:out value="${isManager}" />` == 'true';
 	</script>
 	<script type="text/javascript" src="/resources/js/boardDetail.js"></script>
 </div>

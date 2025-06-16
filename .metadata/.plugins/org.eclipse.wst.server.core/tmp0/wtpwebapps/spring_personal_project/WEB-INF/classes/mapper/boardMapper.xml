@@ -79,7 +79,7 @@
 	</select>
 	
 	<insert id="insertLike">
-		insert into likes values(#{bno}, #{id})b
+		insert into likes values(#{bno}, #{id})
 	</insert>
 	<delete id="removeLike">
 		delete from likes where bno=#{bno} and id=#{id}

@@ -62,4 +62,6 @@ public interface BoardDAO {
 
 	List<BoardVO> getBookmarks(String id);
 
+//	댓글
+	int increaseCmtCount(long bno);
 }
