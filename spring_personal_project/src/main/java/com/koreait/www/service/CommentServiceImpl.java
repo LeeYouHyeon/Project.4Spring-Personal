@@ -35,4 +35,24 @@ public class CommentServiceImpl implements CommentService {
 		if (isOk == 0) return 0;
 		return bdao.increaseCmtCount(cvo.getBno());
 	}
+
+	@Override
+	public int remove(CommentVO cvo) {
+		// TODO Auto-generated method stub
+		if(!match(cvo)) return -1;
+		return cdao.remove(cvo.getCno());
+	}
+
+	@Override
+	public int update(CommentVO cvo) {
+		if (!match(cvo)) return -1;
+		return cdao.update(cvo);
+	}
+	
+	private boolean match(CommentVO cvo) {
+		CommentVO original = cdao.getOne(cvo.getCno());
+		if (original.getPwd() == null) return true;
+		log.info(">> match result {}", cvo.getPwd().equals(original.getPwd()));
+		return cvo.getPwd().equals(original.getPwd());
+	}
 }

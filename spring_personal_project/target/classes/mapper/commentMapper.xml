@@ -14,4 +14,15 @@
 		insert into comment(bno, name, id, content)
 		values(#{bno}, #{name}, #{id}, #{content})
 	</insert>
+	
+	<select id="getOne" resultType="com.koreait.www.domain.CommentVO">
+		select * from comment where cno=#{cno}
+	</select>
+	<delete id="remove">
+		delete from comment where cno=#{cno}
+	</delete>
+	
+	<update id="update">
+		update comment set content=#{content} where cno=#{cno}
+	</update>
 </mapper>

@@ -11,4 +11,10 @@ public interface CommentDAO {
 	int registerAnonymous(CommentVO cvo);
 	
 	int registerAuthenticated(CommentVO cvo);
+
+	CommentVO getOne(long cno);
+
+	int remove(long cno);
+
+	int update(CommentVO cvo);
 }

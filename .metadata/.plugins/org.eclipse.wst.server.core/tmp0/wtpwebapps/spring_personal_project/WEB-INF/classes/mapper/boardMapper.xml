@@ -112,4 +112,9 @@
 			select bno from bookmark where id=#{id}
 		) order by bno desc;
 	</select>
+	
+	<!-- comment -->
+	<update id="increaseCmtCount">
+		update board set cmt_count = cmt_count + 1 where bno = #{bno}
+	</update>
 </mapper>

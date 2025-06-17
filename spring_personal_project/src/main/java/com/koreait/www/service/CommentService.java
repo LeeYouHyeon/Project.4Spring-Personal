@@ -10,4 +10,8 @@ public interface CommentService {
 
 	int register(CommentVO cvo);
 
+	int remove(CommentVO cvo);
+	
+	int update(CommentVO cvo);
+
 }

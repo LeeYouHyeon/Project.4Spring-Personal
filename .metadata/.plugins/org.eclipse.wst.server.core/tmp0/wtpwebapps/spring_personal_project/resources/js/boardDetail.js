@@ -216,21 +216,43 @@ function flushComment() {
       for (const cvo of json) {
         const modifiable = cvo.id == null || cvo.id == id;
         const removable = modifiable || isManager;
-        let cmt = '<div class="row mb-3">';
-        cmt += `<div class="col-2 d-flex justify-content-center align-items-center">${cvo.name}</div>`;
-        cmt += `<div class="col-6 d-flex align-items-center">${cvo.content}</div>`;
-        cmt += `<div class="col-6 d-none align-items-center"><input type="text" data-cno=${cvo.cno} value=${cvo.content} /></div>`;
-        cmt += `<div class="col-2 d-flex justify-content-center align-items-center">${cvo.regDate}</div>`;
-        cmt += '<div class="col-2 d-flex justify-content-end">';
+        let cmt = `
+        <div class="row mb-3" data-cno=${cvo.cno}>`;
+        cmt += `
+          <div class="col-2 d-flex justify-content-center align-items-center">
+            <div class="cmtName">${cvo.name}</div>`;
+        if (cvo.id == null)
+          cmt += `
+            <div class="cmtPwdInput d-none">
+              <div class="w-25 d-flex align-items-center">비밀번호</div>
+              <div class="w-75"><input type="password" class="form-control cmtNameInput"></div>
+            </div>`;
+        cmt += `
+          </div>`;
+        cmt += `
+          <div class="col-6 d-flex align-items-center cmtContent">${cvo.content}</div>`;
+        cmt += `
+          <div class="col-6 d-none align-items-center cmtContentInput">
+            <input type="text" class="form-control" data-cno=${cvo.cno} value=${cvo.content} />
+          </div>`;
+        cmt += `
+          <div class="col-2 d-flex justify-content-center align-items-center">${cvo.regDate}</div>`;
+        cmt += `
+          <div class="col-2 d-flex justify-content-end">`;
         if (modifiable) {
-          cmt += `<button type="button" data-cno=${cvo.cno}
-          class="btn btn-warning me-3 modifyBtn ${cvo.id == null ? 'anonymous' : ''}">수정</button>`;
-          cmt += `<button type="button" data-cno=${cvo.cno}
-          class="btn btn-warning me-3 updateBtn d-none ${cvo.id == null ? 'anonymous' : ''}">확인</button>`;
+          cmt += `
+            <button type="button" data-cno=${cvo.cno}
+              class="btn btn-warning me-3 modifyBtn ${cvo.id == null ? 'anonymous' : ''}">수정</button>`;
+          cmt += `
+            <button type="button" data-cno=${cvo.cno}
+              class="btn btn-warning me-3 updateBtn d-none ${cvo.id == null ? 'anonymous' : ''}">확인</button>`;
         }
-        if (removable) cmt += `<button type="button" data-cno=${cvo.cno}
-          class="btn btn-danger removeBtn ${cvo.id == null ? 'anonymous' : ''}">삭제</button>`;
-        cmt += '</div></div>';
+        if (removable) cmt += `
+            <button type="button" data-cno=${cvo.cno}
+              class="btn btn-danger removeBtn ${cvo.id == null ? 'anonymous' : ''}">삭제</button>`;
+        cmt += `
+          </div>
+        </div>`;
         cmtListArea.innerHTML += cmt;
       }
     }).catch(console.log);
@@ -243,20 +265,28 @@ document.addEventListener('click', e => {
   const cno = e.target.dataset.cno;
 
   if (classList.contains('modifyBtn')) {
-    if (classList.contains('anonymous')) {
+    const cmtArea = e.target.closest('.row');
+    
+    hide(cmtArea.querySelector('.cmtContent'));
+    show(cmtArea.querySelector('.cmtContentInput'));
+    hide(cmtArea.querySelector('.modifyBtn'));
+    show(cmtArea.querySelector('.updateBtn'));
 
+    if (classList.contains('anonymous')) {
+      show(cmtArea.querySelector('.cmtPwdInput'));
     }
   } else if (classList.contains('removeBtn') && confirm('댓글을 삭제하시겠습니까?')) {
-    if (classList.contains(anonymous)) {
+    if (classList.contains('anonymous')) {
+      const pwdInput = prompt('비밀번호를 입력하세요.');
       fetch('/comment/remove', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json; charset=utf-8'
         },
-        body: {
+        body: JSON.stringify({
           cno: cno,
-          pwd: prompt('비밀번호를 입력하세요.')
-        }
+          pwd: pwdInput
+        })
       }).then(resp => resp.text())
         .then(result => {
           if (result == '-1') alert('비밀번호가 틀렸습니다.');
@@ -275,7 +305,34 @@ document.addEventListener('click', e => {
         })
     }
   } else if (classList.contains('updateBtn')) {
+    const cmtArea = e.target.closest('.row');
+    let json = {
+      cno: cmtArea.dataset.cno,
+      content: cmtArea.querySelector('.cmtContentInput input').value
+    };
+    const pwdInput = cmtArea.querySelector('.cmtPwdInput input');
+    if (pwdInput != null) json['pwd'] = pwdInput.value;
 
+    fetch('/comment/update', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(json)
+    }).then(resp => resp.text())
+    .then(result => {
+      if (result == '-1') alert('비밀번호가 틀렸습니다.');
+      else if (result == '0') alert('댓글 수정에 실패했습니다.');
+      else {
+        if(classList.contains('anonymous')) hide(cmtArea.querySelector('.cmtPwdInput'));
+        cmtArea.querySelector('.cmtContent').innerText = cmtArea.querySelector('.cmtContentInput input').value;
+        hide(cmtArea.querySelector('.cmtContentInput'));
+        show(cmtArea.querySelector('.cmtContent'));
+        hide(e.target);
+        show(cmtArea.querySelector('.modifyBtn'));
+      }
+      
+    })
   }
 });
 

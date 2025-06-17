@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommentController {
 
 	private final CommentService csv;
-	private final BCryptPasswordEncoder bc;
+//	private final BCryptPasswordEncoder bc;
 	
 	@ResponseBody
 	@GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,7 +35,25 @@ public class CommentController {
 	@ResponseBody
 	@PostMapping("/register")
 	public String register(@RequestBody CommentVO cvo) {
-		if (cvo.getPwd() != null) cvo.setPwd(bc.encode(cvo.getPwd()));
+//		encodePwd(cvo);
 		return String.valueOf(csv.register(cvo));
 	}
+	
+	@ResponseBody
+	@PostMapping("/remove")
+	public String remove(@RequestBody CommentVO cvo) {
+//		encodePwd(cvo);
+		return String.valueOf(csv.remove(cvo));
+	}
+	
+	@ResponseBody
+	@PostMapping("/update")
+	public String update(@RequestBody CommentVO cvo) {
+//		encodePwd(cvo);
+		return String.valueOf(csv.update(cvo));
+	}
+	
+//	private void encodePwd(CommentVO cvo) {
+//		if (cvo.getPwd() != null) cvo.setPwd(bc.encode(cvo.getPwd())); 
+//	}
 }
